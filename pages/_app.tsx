@@ -1,8 +1,18 @@
-import '../styles/globals.css'
-import type { AppProps } from 'next/app'
+import '../styles/globals.scss'
+import 'bootstrap/dist/css/bootstrap.css';
+import { SessionProvider } from 'next-auth/react';
+import Layout from '../components/layout/layout';
+import "@fortawesome/fontawesome-svg-core/styles.css"; 
 
-function MyApp({ Component, pageProps }: AppProps) {
-  return <Component {...pageProps} />
+function MyApp({ Component, pageProps }: any) {
+  return (
+    <SessionProvider session={pageProps.session}>
+      <Layout>
+        <Component {...pageProps} />
+      </Layout>
+    </SessionProvider>
+
+  );
 }
 
-export default MyApp
+export default MyApp;
