@@ -1,3 +1,31 @@
 .container {
     margin-top: 3em;
+
+    .cardStyle {
+        width: 30em;
+        margin: 0 auto;
+        min-height: 35em;
+        background-color: #f8f9fc;
+        color: black;
+        padding: 0.8em;
+    }
+
+    .options {
+        padding-top: 2em;
+    }
+}
+
+.banner {
+    padding: 0.8em;
+    width: 30em;
+    min-height: 35em;
+    background-color: rgb(25, 103, 192);
+}
+
+.blue {
+    color: rgb(14, 81, 158);
+}
+
+.catImage {
+    height: 18em;
 }

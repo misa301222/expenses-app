@@ -1,0 +1,25 @@
+.moneyBackground {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/static/images/Money.jpg");
+    height: 50em;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    h1 {
+        color: white;
+    }
+}
+
+.header {
+    padding-top: 1.5em;
+}
+
+.green {
+    color: #519259;
+}
+
+.cardStyle {
+    width: 30em;
+    margin: 0 auto;
+    min-height: 30em;
+}

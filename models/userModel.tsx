@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
 
 const userSchema = new mongoose.Schema({
-    name: {
+    fullName: {
         type: String,
         default: 'guest'
     },
@@ -11,15 +11,15 @@ const userSchema = new mongoose.Schema({
     password: {
         type: String
     },
-    image: {
+    imageURL: {
         type: String,
-        default: 'https://res.cloudinary.com/devatchannel/image/upload/v1602752402/avatar/avatar_cugq40.png'
+        default: ''
     },
-    emailVerified: {
+    role: {
         type: String,
-        default: null
-    },
+        default: 'USER'
+    }
 }, { timestamps: true })
 
-let Dataset = mongoose.models.users || mongoose.model('users', userSchema)
-export default Dataset;
+let User = mongoose.models.users || mongoose.model('users', userSchema)
+export default User;

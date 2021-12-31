@@ -1,7 +1,10 @@
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
+import connectDB from "../../../config/connectDB";
 import { verifyPassword } from '../../../lib/auth';
-import { connectToDatabase } from '../../../lib/db';
+import User from "../../../models/userModel";
+
+connectDB();
 
 export default NextAuth({
     session: {
@@ -22,17 +25,9 @@ export default NextAuth({
                 password: { label: "Password", type: "password" }
             },
             async authorize(credentials: any) {
-                const client: any = await connectToDatabase();
-
-                const usersCollection = client.db().collection('users');
-
-                const user = await usersCollection.findOne({
-                    email: credentials.email,
-                });
-
+                const user = await User.findOne({ email: credentials.email });
                 if (!user) {
-                    client.close();
-                    throw new Error('No user found!');
+                    throw new Error('Invalid username or password. Please check the data!');
                 }
 
                 const isValid = await verifyPassword(
@@ -41,44 +36,21 @@ export default NextAuth({
                 );
 
                 if (!isValid) {
-                    client.close();
-                    throw new Error('Could not log you in!');
+                    throw new Error('Invalid username or password. Please check the data!');
                 }
-
-                client.close();
-                return { email: user.email };
-
+                return { fullName: user.fullName, email: user.email };
             },
         })
     ],
     pages: {
         signIn: '/login'
     },
-    // SQL or MongoDB database (or leave empty)
-    //database: process.env.DATABASE_URL,
+    callbacks: {
+        session: async (session: any, user: any, token: any) => {
+            // const resUser = await Users.findById(user.sub)
+            // session.emailVerified = resUser.emailVerified
+            // session.user = user.user;
+            return Promise.resolve(session);
+        }
+    } as any
 });
-
-/*
-const loginUser = async ({ password, user }: any) => {
-    if (!user.password) {
-        throw new Error("Accounts have to login with OAuth or Email.")
-    }
-
-    const isMatch = await bcrypt.compare(password, user.password)
-    if (!isMatch) {
-        throw new Error("Password Incorrect.");
-    }
-
-    if (!user.emailVerified) {
-        throw new Error("Success! Check your email.");
-    }
-
-    return user;
-}
-
-const registerUser = async ({ email, password }: any) => {
-    const hashPass = await bcrypt.hash(password, 12)
-    const newUser = new Users({ email, password: hashPass })
-    await newUser.save()
-    throw new Error("Success! Check your email.");
-}*/

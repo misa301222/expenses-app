@@ -9,29 +9,27 @@ function MainNavigation() {
 
     function logoutHandler() {
         localStorage.clear();
-        signOut();
+        signOut({
+            callbackUrl: '/'
+        });
     }
 
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-dark">
             <div className="container-fluid d-flex">
                 <div className={`${classes.navigationTitle}`}>
-                    <Link href="/home">Expsenses App  </Link>
-                    <FontAwesomeIcon icon={faMoneyBillWaveAlt} />
+                    <Link href="/">Expsenses App  </Link>
+                    <FontAwesomeIcon icon={faMoneyBillWaveAlt} className={classes.green} />
                 </div>
                 <div className={``} id="navbarText">
                     <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                         <li className={`${classes.menuItem} nav-link nav-item`}>
-                            <Link href="/home">Home</Link>
+                            <Link href="/">Home</Link>
                         </li>
+
                         {session && (
                             <li className={`${classes.menuItem} nav-link nav-item`}>
-                                <Link href="/profile">Profile</Link>
-                            </li>
-                        )}
-                        {!session && status != "loading" && (
-                            <li className={`${classes.menuItem} nav-link nav-item`}>
-                                <Link href="/login/login">Login</Link>
+                                <Link href="/expenses/expensesMain">Expenses</Link>
                             </li>
                         )}
                     </ul>
@@ -42,7 +40,7 @@ function MainNavigation() {
                         {session && status == "authenticated" && (
                             <div className='d-flex flex-row justify-content-end align-items-end container'>
                                 <li className={`${classes.menuItem} nav-link nav-item`}>
-                                    <h6>{localStorage.getItem('email')}</h6>
+                                    <Link href="profile">{localStorage.getItem('email')}</Link>
                                 </li>
                                 <li className={`${classes.menuItem} nav-link nav-item`}>
                                     <button className='btn btn-danger btn-sm' onClick={logoutHandler}>Logout</button>
