@@ -1,5 +1,8 @@
+import { faMoneyBillAlt } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useSession } from "next-auth/react";
-import { useEffect, useState } from "react";
+import Link from "next/link";
+import { ChangeEvent, useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import classes from './add-expenses.module.scss';
 
@@ -19,29 +22,33 @@ async function createExpense(expense: any) {
     return data;
 }
 
-function AddExpenses() {
+function AddExpenses({ data }: any) {
     const [todayDate] = useState(new Date());
+    const [feeling, setFeeling] = useState([{
+        feeling: '',
+        feelingImageURL: ''
+    }]);
     const [expense, setExpense] = useState({
         description: '',
         quantitySpent: 0,
-        feeling: 'OK',
+        feeling: 'Happy',
         date: new Date(),
         email: '',
     });
 
-    const handleOnChangeDescription = (event: any) => {
+    const handleOnChangeDescription = (event: ChangeEvent<HTMLInputElement>) => {
         setExpense(prev => ({ ...prev, description: event.target.value }));
     }
 
-    const handleOnChangeQuantitySpent = (event: any) => {
+    const handleOnChangeQuantitySpent = (event: ChangeEvent<any>) => {
         setExpense(prev => ({ ...prev, quantitySpent: event.target.value }));
     }
 
-    const handleOnChangeFeeling = (event: any) => {
-        setExpense(prev => ({ ...prev, feeling: event.target.value }));
+    const handleOnChangeFeeling = (value: string) => {
+        setExpense(prev => ({ ...prev, feeling: value }));
     }
 
-    const handleOnChangeDate = (event: any) => {
+    const handleOnChangeDate = (event: ChangeEvent<any>) => {
         setExpense(prev => ({ ...prev, date: event.target.value }));
     }
 
@@ -60,15 +67,15 @@ function AddExpenses() {
     }
 
     useEffect(() => {
+        setFeeling(data);
         localStorage.getItem('email') ? setExpense(prev => ({ ...prev, email: localStorage.getItem('email') || '{}' })) : '';
-        // console.log(todayDate.toLocaleDateString().split('/')[2] + '/' + todayDate.toLocaleDateString().split('/')[0] + '/' + todayDate.toLocaleDateString().split('/')[1]);
     }, [])
 
     return (
         <div className="container container-data">
 
             <div className="">
-                <h1 className="text-center">New Expense!</h1>
+                <h1 className="text-center">New Expense! <FontAwesomeIcon icon={faMoneyBillAlt} /></h1>
                 <hr></hr>
             </div>
 
@@ -81,7 +88,10 @@ function AddExpenses() {
                         <p className='fw-bold text-wrap'>Fill the data and then click in Save to add it~!</p>
                         <br></br>
                         <div className='container text-center'>
-
+                            <p className="fst-italic">If you want to see your current expenses click down below :]</p>
+                            <div className='d-flex flex-row justify-content-center mb-2'>
+                                <Link href="/expenses/showExpense"><a className="btn btn-dark btn-sm btn-outline-light">Show All Expenses</a></Link>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -101,7 +111,13 @@ function AddExpenses() {
 
                             <div className="mb-3">
                                 <label htmlFor='feeling' className='form-label fw-bold'>Feeling</label>
-                                <input type='text' className="form-control" name="feeling" onChange={handleOnChangeFeeling} value={'OK'} autoComplete="off" />
+                                <select name="feeling" id="feelingId" className="form-select" onChange={e => handleOnChangeFeeling(e.target.value)}>
+                                    {
+                                        feeling.map((feeling, index) => (
+                                            <option key={index} value={feeling.feeling}>{feeling.feeling}</option>
+                                        ))
+                                    }
+                                </select>
                             </div>
 
                             <div className="mb-3">

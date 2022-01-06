@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, SyntheticEvent } from 'react';
 import { getSession, signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import classes from './auth-form.module.scss';
@@ -28,7 +28,7 @@ function AuthForm() {
   const fullNameRef = useRef<any>();
   const emailInputRef = useRef<any>();
   const passwordInputRef = useRef<any>();
-  const { data: session, status } = useSession();
+  // const { data: session, status } = useSession();
 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -45,7 +45,7 @@ function AuthForm() {
     }
   }, []);
 
-  async function submitHandler(event: any) {
+  async function submitHandler(event: SyntheticEvent) {
     event.preventDefault();
     let enteredFullName = '';
     const enteredEmail = emailInputRef.current.value;

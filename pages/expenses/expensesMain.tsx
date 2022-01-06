@@ -8,12 +8,12 @@ function ExpensesMainPage({ data }: any) {
 }
 
 // This gets called on every request
-export async function getServerSideProps(context: any) {
-    const month = moment(new Date()).month();
+export async function getServerSideProps(context: any) {    
+    const year = moment(new Date()).format('YYYY');
     const { req } = context;
     const { cookie } = req.headers;
 
-    const response = await fetch(`http://localhost:3000/api/expenses/expensesAPI/expensesAPIMonth/${month}`, {
+    const response = await fetch(`http://localhost:3000/api/expenses/expensesAPI/expensesAPIExpensesByMonth/${year}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

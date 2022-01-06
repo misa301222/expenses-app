@@ -6,27 +6,14 @@ import Expense from "../../../../../models/expenseModel";
 connectDB();
 async function handler(req: any, res: any) {
     if (req.method === 'GET') {
-        const year = moment(new Date()).format('YYYY');
-        // const { month } = req.query;
+        const { year } = req.query;
         const yearPlusOne: number = parseInt(year) + 1;
-        // const monthQuery = moment(parseInt(month) + 1, 'MM').format('MMM');
         const session = await getSession({ req });
 
         if (!session) {
             return res.status(400).json({ msg: "Invalid Authentication!" })
         }
-
-        // console.log('days in month: ' + moment(`${year}-${parseInt(month) + 1}`).daysInMonth());
         const { email }: any = session.token;
-        /*
-        let expenses = await Expense.find({
-            date: {
-                $gte: new Date(`1 ${monthQuery}, ${year}`),
-                $lt: new Date(`31 ${monthQuery}, ${year}`)
-            },
-            email: email
-        });
-        */
         let monthlyArray: any = {
             '01': [],
             '02': [],
@@ -44,14 +31,14 @@ async function handler(req: any, res: any) {
 
         let expenses = await Expense.find({
             date: {
-                $gte: new Date(`1 Jan, ${year}`),
-                $lt: new Date(`31 Jan, ${yearPlusOne}`)
+                $gte: new Date(`${year}-01-01T00:00:00Z`),
+                $lt: new Date(`${yearPlusOne}-01-01T23:59:00Z`)
             },
             email: email
         });
 
         for (let i = 0; i < expenses.length; i++) {
-            let key: string = moment(expenses[i].date.toString()).format('MM/DD/YYYY').split('/')[0];
+            let key: string = moment(expenses[i].date.toString()).utcOffset(0).format('MM/DD/YYYY').split('/')[0];
             monthlyArray[key].push(expenses[i]);
         }
 

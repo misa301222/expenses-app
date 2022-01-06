@@ -39,6 +39,38 @@ async function handler(req: any, res: any) {
         res.json(expenses);
     }
 
+    if (req.method === 'PUT') {
+        const session = await getSession({ req });
+        if (!session) {
+            return res.status(400).json({ msg: "Invalid Authentication!" })
+        }
+
+        const { expenseToUpdate }: any = req.body;
+
+        let expense = await Expense.findByIdAndUpdate(
+            expenseToUpdate._id,
+            expenseToUpdate
+        );
+
+        res.json(expense);
+    }
+
+    if (req.method === 'DELETE') {
+        const session = await getSession({ req });
+        if (!session) {
+            return res.status(400).json({ msg: "Invalid Authentication!" })
+        }
+
+        const { _id }: any = req.body;
+
+        let expense = await Expense.findByIdAndDelete({
+            _id: _id
+        });
+
+        console.log(expense);
+        res.json(expense);
+    }
+
 }
 
 export default handler;

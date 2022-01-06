@@ -1,0 +1,36 @@
+.profile {
+  margin: 3rem auto;
+  text-align: center;
+}
+
+.profile h1 {
+  font-size: 5rem;
+}
+
+.mainContainer {
+  height: 50em;
+  background-color: white;
+}
+
+.renglon {
+  height: 25em;
+  // background-color: pink;
+}
+
+.imageContainer {
+  margin-top: 3em;
+  height: 40em;
+  width: 35em;  
+}
+
+.imageContainerSmall {
+  height: 20em;
+  // background-color: green;
+  width: 35em;
+  margin-top: 2em;
+}
+
+.imageThumbnail {
+  width: 25em;
+  border-radius: 13px;
+}

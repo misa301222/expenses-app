@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { SyntheticEvent, useRef } from 'react';
 
 import classes from './profile-form.module.css';
 
@@ -6,7 +6,7 @@ function ProfileForm(props: any) {
     const oldPasswordRef: any = useRef();
     const newPasswordRef: any = useRef();
 
-    function submitHandler(event: any) {
+    function submitHandler(event: SyntheticEvent) {
         event.preventDefault();
 
         const enteredOldPassword = oldPasswordRef.current.value;

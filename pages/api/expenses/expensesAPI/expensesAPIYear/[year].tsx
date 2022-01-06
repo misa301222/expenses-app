@@ -1,3 +1,4 @@
+import moment from "moment";
 import { getSession } from "next-auth/react";
 import connectDB from "../../../../../config/connectDB";
 import Expense from "../../../../../models/expenseModel";
@@ -17,8 +18,8 @@ async function handler(req: any, res: any) {
 
         let expenses = await Expense.find({
             date: {
-                $gte: new Date(`1 Jan, ${year}`),
-                $lt: new Date(`1 Jan, ${yearPlusOne}`)
+                $gte: new Date(`${year}-01-01T00:00:00Z`),
+                $lt: new Date(`${yearPlusOne}-01-01T23:59:00Z`)
             },
             email: email
         });
