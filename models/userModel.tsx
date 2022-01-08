@@ -18,6 +18,10 @@ const userSchema = new mongoose.Schema({
     role: {
         type: String,
         default: 'USER'
+    },
+    privateInfo: {
+        type: Boolean,
+        defalult: false
     }
 }, { timestamps: true })
 

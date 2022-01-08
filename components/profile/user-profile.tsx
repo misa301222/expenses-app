@@ -29,7 +29,15 @@ async function getProfileInfo() {
       'Content-Type': 'application/json',
     },
   });
-  console.log(response);
+
+  const data = await response.json();
+  if (!response.ok) {
+    throw new Error(data.message || 'Something went wrong!');
+  }
+
+  console.log(data);
+
+  return data;
 }
 
 
@@ -74,7 +82,7 @@ function UserProfile({ data }: any) {
     });
   }
 
-  useEffect(() => {    
+  useEffect(() => {
     setEditedUser(user);
   }, [])
 

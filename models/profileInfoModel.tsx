@@ -21,8 +21,17 @@ const profileInfoSchema = new mongoose.Schema({
     },
     imagesURL: {
         type: [String]
+    },
+    coverURL: {
+        type: String
+    },
+    location: {
+        type: String
+    },
+    jobs: {
+        type: [String]
     }
-});
+}, { timestamps: true });
 
-let ProfileInfo = mongoose.models.profileInfo || mongoose.model('profileInfo', profileInfoSchema);
+let ProfileInfo = mongoose.models.profileinfos || mongoose.model('profileinfos', profileInfoSchema);
 export default ProfileInfo;

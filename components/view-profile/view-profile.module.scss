@@ -1,0 +1,101 @@
+.coverImage {
+    // background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("https://wallpaperaccess.com/full/329362.jpg");
+    height: 25em;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.profileInfo {
+    margin-left: 3vw;
+    margin-top: -10em;
+}
+
+.icon {
+    font-size: 3em;
+    background-color: white;
+    color: salmon;
+}
+
+.rotate {
+    padding: 0.2em;
+    transform: rotate(-15deg);
+    transition: transform 0.2s ease-in-out;
+}
+
+.rotate:hover {
+    transform: rotate(0deg);
+    cursor: default;
+}
+
+.rotateRight {
+    transform: rotate(20deg);
+    transition: transform 0.2s ease-in-out;
+}
+
+.rotateRight:hover {
+    transform: rotate(0deg);
+    cursor: default;
+}
+
+.cardDescription {
+    width: 10em;
+    li {
+        list-style-type: square;
+    }
+}
+
+.containerImages {
+    margin-top: 5em;
+}
+
+.images {
+    overflow-x: auto;
+}
+
+.imageThumbnail {
+    width: 25em;
+    // height: auto;
+}
+
+.imageCard {
+    padding: 1em;
+    width: 40em;
+    // height: auto;
+    margin-right: 3em;
+    margin-bottom: 2em;
+    background-color: white;
+}
+
+.square {
+    width: 20vw;
+    height: 20vw;
+    background-color: rgb(231, 231, 231);
+    // position: absolute;
+    // top: 10vw;
+    // left: 10vw;
+
+    .photo {
+        width: 17vw;
+        height: 17vw;
+    }
+}
+
+.info {
+    // position: absolute;
+    // top: 12vw;
+    // left: 39vw;
+    width: 60em;
+}
+
+.fullNameDesign {
+    background-color: rgb(231, 231, 231);
+}
+
+.fontBig {
+    font-size: 4em;
+}
+
+.textGray {
+    color: rgb(216, 216, 216);
+}

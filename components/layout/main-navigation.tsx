@@ -5,7 +5,7 @@ import { faMoneyBillWaveAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function MainNavigation() {
-    const { data: session, status } = useSession();    
+    const { data: session, status } = useSession();
 
     function logoutHandler() {
         localStorage.clear();
@@ -30,6 +30,12 @@ function MainNavigation() {
                         {session && (
                             <li className={`${classes.menuItem} nav-link nav-item`}>
                                 <Link href="/expenses/expensesMain">Expenses</Link>
+                            </li>
+                        )}
+
+                        {session && (
+                            <li className={`${classes.menuItem} nav-link nav-item`}>
+                                <Link href="/viewUsers/viewUsers">Users</Link>
                             </li>
                         )}
                     </ul>

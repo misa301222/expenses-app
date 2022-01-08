@@ -2,7 +2,7 @@ html,
 body {
   padding: 0;
   margin: 0;
-  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif !important;
+  font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif !important;
 }
 
 body {
@@ -16,6 +16,11 @@ body {
 
   .container-data {
     margin-top: 3em;
+    margin-bottom: 10em;
+  }
+
+  .main {
+    margin-bottom: 10em;
   }
 }
 
