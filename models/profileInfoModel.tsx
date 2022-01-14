@@ -5,31 +5,40 @@ const profileInfoSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId, ref: 'users'
     },
     descriptionHeader: {
-        type: String
+        type: String,
+        defaults: 'This is a header'
     },
     description: {
-        type: String
+        type: String,
+        defaults: 'This is a description'
     },
     hobbies: {
-        type: [String]
+        type: [String],
+        defaults: ''
     },
     education: {
-        type: [String]
+        type: [String],
+        defaults: ''
     },
     phoneNumber: {
-        type: String
+        type: String,
+        defaults: ''
     },
     imagesURL: {
-        type: [String]
+        type: [String],
+        defaults: ''
     },
     coverURL: {
-        type: String
+        type: String,
+        defaults: ''
     },
     location: {
-        type: String
+        type: String,
+        defaults: ''
     },
     jobs: {
-        type: [String]
+        type: [String],
+        defaults: ''
     }
 }, { timestamps: true });
 

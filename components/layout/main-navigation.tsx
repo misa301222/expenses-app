@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import classes from './main-navigation.module.scss';
-import { faMoneyBillWaveAlt } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faHome, faMoneyBillWaveAlt, faMoneyCheck, faUserCircle, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 function MainNavigation() {
@@ -22,33 +22,37 @@ function MainNavigation() {
                     <FontAwesomeIcon icon={faMoneyBillWaveAlt} className={classes.green} />
                 </div>
                 <div className={``} id="navbarText">
-                    <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+                    <ul className={`navbar-nav me-auto mb-2 mb-lg-0 ${classes.centerMenu}`}>
                         <li className={`${classes.menuItem} nav-link nav-item`}>
-                            <Link href="/">Home</Link>
+                            <Link href="/"><h5 className=''><FontAwesomeIcon icon={faHome} /> Home</h5></Link>
                         </li>
 
                         {session && (
                             <li className={`${classes.menuItem} nav-link nav-item`}>
-                                <Link href="/expenses/expensesMain">Expenses</Link>
+                                <Link href="/expenses/expensesMain"><h5 className=''><FontAwesomeIcon icon={faMoneyCheck} /> Expenses</h5></Link>
                             </li>
                         )}
 
                         {session && (
                             <li className={`${classes.menuItem} nav-link nav-item`}>
-                                <Link href="/viewUsers/viewUsers">Users</Link>
+                                <Link href="/viewUsers/viewUsers"><h5 className=''><FontAwesomeIcon icon={faUsers} /> Users</h5></Link>
                             </li>
                         )}
                     </ul>
                 </div>
 
-                <div className='col-2'>
-                    <ul className='navbar-nav me-auto mb-2 mb-lg-0'>
+                <div className='col-sm-2'>
+                    <ul className='navbar-nav me-auto mb-2 mb-lg-0 d-flex flex-row justify-content-end'>
                         {session && status == "authenticated" && (
-                            <div className='d-flex flex-row justify-content-end align-items-end container'>
+                            <div className='d-flex flex-row justify-content-end align-items-end'>
                                 <li className={`${classes.menuItem} nav-link nav-item`}>
-                                    {/* <Link href="profile">{localStorage.getItem('email')}</Link> */}
-                                    <Link href="/profile">Profile</Link>
+                                    <Link href="/messages/viewMessages"><h5><FontAwesomeIcon icon={faEnvelope} /> Messages</h5></Link>
                                 </li>
+
+                                <li className={`${classes.menuItem} nav-link nav-item`}>
+                                    <Link href="/profile"><h5><FontAwesomeIcon icon={faUserCircle} /> Profile</h5></Link>
+                                </li>
+
                                 <li className={`${classes.menuItem} nav-link nav-item`}>
                                     <button className='btn btn-danger btn-sm' onClick={logoutHandler}>Logout</button>
                                 </li>

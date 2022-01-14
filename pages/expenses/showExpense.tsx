@@ -1,4 +1,5 @@
 import moment from "moment";
+import { getSession } from "next-auth/react";
 import ShowExpense from "../../components/expenses/show-expenses/show-expense";
 
 function ShowExpensePage({ year, month, feeling }: any) {
@@ -7,6 +8,16 @@ function ShowExpensePage({ year, month, feeling }: any) {
 
 // This gets called on every request
 export async function getServerSideProps(context: any) {
+    const session = await getSession({ req: context.req });
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+
     const year = moment(new Date()).format('YYYY');
     const { req } = context;
     const { cookie } = req.headers;

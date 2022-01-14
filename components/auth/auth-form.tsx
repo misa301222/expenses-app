@@ -3,13 +3,32 @@ import { getSession, signIn, useSession } from 'next-auth/react';
 import { useRouter } from 'next/router';
 import classes from './auth-form.module.scss';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSave, faSignInAlt, faTerminal } from '@fortawesome/free-solid-svg-icons';
+import { faHeart, faSave, faSignInAlt, faTerminal } from '@fortawesome/free-solid-svg-icons';
 import Swal from 'sweetalert2';
+import { motion } from 'framer-motion';
 
 async function createUser(fullName: string, email: string, password: string) {
   const response = await fetch('/api/auth/signupAPI', {
     method: 'POST',
     body: JSON.stringify({ fullName, email, password }),
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  const data = await response.json();
+
+  if (!response.ok) {
+    throw new Error(data.message || 'Something went wrong!');
+  }
+
+  return data;
+}
+
+async function createProfileInfoBlank(_id: string) {
+  const response = await fetch('/api/profileInfo/profileInfoAPI', {
+    method: 'POST',
+    body: JSON.stringify({ _id }),
     headers: {
       'Content-Type': 'application/json',
     },
@@ -84,6 +103,9 @@ function AuthForm() {
       try {
         enteredFullName = fullNameRef.current.value;
         const result = await createUser(enteredFullName, enteredEmail, enteredPassword);
+        const { _id } = result._doc;
+        const resultProfileInfo = await createProfileInfoBlank(_id);
+
         Swal.fire({
           position: 'center',
           icon: 'success',
@@ -111,9 +133,15 @@ function AuthForm() {
             <br></br>
             <h2 className='text-center'>Hey you! Yes you!</h2>
             <hr></hr>
-            <p className='fw-bold text-wrap'>Start tracking your expenses by creating an Account here~!
-              <br></br><br></br>
-              You can create an account by Selecting Create New Account, you need an email in order to SignUp.</p>
+            {isLoggedIn ?
+              <p className='fw-bold text-wrap'>Welcome back! We missed you. Only a little OwO
+                <br></br><br></br>
+                What are you waiting? Start browsing <FontAwesomeIcon icon={faHeart} /></p>
+              :
+              <p className='fw-bold text-wrap'>Start tracking your expenses by creating an Account here~!
+                <br></br><br></br>
+                You can create an account by Selecting Create New Account, you need an email in order to SignUp.</p>
+            }
             <br></br>
             <div className='container text-center'>
               <h5>Expenses App Team <FontAwesomeIcon icon={faTerminal} /></h5>
@@ -169,7 +197,16 @@ function AuthForm() {
                   <h1 className='text-dark'>Welcome back!</h1>
                   <br></br>
                   <h5>Look at this cat!</h5>
-                  <img src='/static/images/Cat.png' alt='catDrawing' className={classes.catImage} />
+                  <motion.img
+                    animate={{
+                      rotateY: [0, 0, 0, 0, 300, -350, 0, 0, 0, 0],
+                      translateY: [0, 0, 0, -150, -300, -150, -150, 0, 0, 0],
+                    }}
+                    transition={{
+                      repeat: Infinity,
+                      duration: 3.5
+                    }}
+                    src='/static/images/Cat.png' alt='catDrawing' className={classes.catImage} />
                   <br></br>
                   <small className='text-muted fw-bold fst-italic'>This is cute!</small>
                 </div>

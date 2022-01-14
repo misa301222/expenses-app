@@ -10,8 +10,30 @@
     }
 }
 
+.smokeBackground {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/static/images/SmokeBackground.jpg");
+    // height: 50em;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
 .header {
     padding-top: 1.5em;
+}
+
+.imagesThumbnail {
+    width: 23em;
+}
+
+.cardWidth {
+    width: 25em;    
+    padding: 0.8em;
+}
+
+.widthContainer {
+    width: 80%;
+    margin: 0 auto;
 }
 
 .green {
@@ -22,4 +44,32 @@
     width: 30em;
     margin: 0 auto;
     min-height: 30em;
+}
+
+.gray {
+    color: #B8B8B8;
+}
+
+.whiteGray {
+    background-color: #d1d1d1;
+}
+
+.marginTop {
+    margin-top: 10em;
+}
+
+.main {
+    padding-top: 3em;
+}
+
+.codeImage {
+    width: 40em;
+}
+
+.banner {
+    background-color: white;    
+}
+
+.colInfo {
+    width: 40em;
 }

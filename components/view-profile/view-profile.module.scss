@@ -24,8 +24,8 @@
 }
 
 .rotate:hover {
-    transform: rotate(0deg);
-    cursor: default;
+    // transform: rotate(0deg);
+    // cursor: default;
 }
 
 .rotateRight {
@@ -34,8 +34,8 @@
 }
 
 .rotateRight:hover {
-    transform: rotate(0deg);
-    cursor: default;
+    // transform: rotate(0deg);
+    // cursor: default;
 }
 
 .cardDescription {
@@ -49,22 +49,23 @@
     margin-top: 5em;
 }
 
-.images {
-    overflow-x: auto;
-}
-
-.imageThumbnail {
-    width: 25em;
-    // height: auto;
+.imagesILikeContainer {
+    height: 50em;
+    // background-color: white;
 }
 
 .imageCard {
     padding: 1em;
-    width: 40em;
-    // height: auto;
+    width: 27em;
     margin-right: 3em;
     margin-bottom: 2em;
     background-color: white;
+
+    position: absolute;
+}
+
+.imageThumbnail {
+    width: 25em;
 }
 
 .square {

@@ -1,5 +1,6 @@
 import { faMoneyBillAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { motion } from "framer-motion";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -83,7 +84,16 @@ function AddExpenses({ data }: any) {
                 <div className={`${classes.banner} d-flex flex-row`}>
                     <div className='container d-flex flex-column'>
                         <br></br>
-                        <h2 className='text-center'>Here you can Add a New Expense</h2>
+                        <motion.h2
+                            animate={{
+                                translateY: [0, 0, 0, -30, -25, -30, -25, 0, 0, 0],
+                                rotate: [0, 0, 0, 0, -10, 10, -10, 0, 0, 0]
+                            }}
+                            transition={{
+                                repeat: Infinity,
+                                duration: 4
+                            }}
+                            className='text-center'>Here you can Add a New Expense</motion.h2>
                         <hr></hr>
                         <p className='fw-bold text-wrap'>Fill the data and then click in Save to add it~!</p>
                         <br></br>

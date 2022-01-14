@@ -10,6 +10,7 @@
 .mainContainer {
   height: 50em;
   background-color: white;
+  border-radius: 13px;
 }
 
 .renglon {
@@ -20,7 +21,7 @@
 .imageContainer {
   margin-top: 3em;
   height: 40em;
-  width: 35em;  
+  width: 35em;
 }
 
 .imageContainerSmall {
@@ -28,9 +29,27 @@
   // background-color: green;
   width: 35em;
   margin-top: 2em;
+  padding: 0.3em;
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
 }
 
 .imageThumbnail {
   width: 25em;
   border-radius: 13px;
+}
+
+.tableDiv {
+  height: 25em;
+  overflow-y: auto;
+}
+
+.formStyle {
+  textarea {
+    resize: none;
+  }
+
 }

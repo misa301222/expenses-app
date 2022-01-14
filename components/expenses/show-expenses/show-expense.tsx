@@ -1,6 +1,7 @@
 import { faMoneyBillAlt, faPencilAlt, faSearchDollar, faSmileBeam, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Chart, registerables } from 'chart.js';
+import { motion } from 'framer-motion';
 import moment from 'moment';
 import Link from 'next/link';
 import { ChangeEvent, useEffect, useRef, useState } from 'react';
@@ -395,7 +396,7 @@ function ShowExpense({ data }: any) {
                                     </tr>
                                 </thead>
 
-                                <tbody>
+                                <motion.tbody layout>
                                     {
                                         expenses.length ?
                                             expenses[0].description ?
@@ -419,7 +420,7 @@ function ShowExpense({ data }: any) {
                                                 <td colSpan={4}>There is no data!</td>
                                             </tr>
                                     }
-                                </tbody>
+                                </motion.tbody>
                             </table>
                         </div>
 
@@ -433,33 +434,36 @@ function ShowExpense({ data }: any) {
                 <div className={`col-sm-6 ${classes.colHeight}`}>
                     <div className={`row ${classes.renglon}`}>
                         <div className='container'>
-                            <h5 className='text-center fw-bold'><u>Summary</u></h5>
-                            <hr></hr>
-                            <div className='mb-3'>
-                                <h6><b>Total Spent this month: </b> <u>${totalSpentMonth}</u></h6>
+                            <div className={`${classes.cardStyle} shadow`}>
+                                <h5 className='text-center fw-bold'><u>Summary</u></h5>
+                                <hr></hr>
                                 <div className='mb-3'>
-                                    <h6><b>Feelings Counter <FontAwesomeIcon icon={faSmileBeam} /> </b></h6>
-                                    {
-                                        Object.entries(countObj).map(([key, value], index) => (
-                                            <div className='d-flex flex-row' key={index}>
-                                                <div className='col text-center fst-italic'>
-                                                    {key}:
-                                                </div>
+                                    <h6><b>Total Spent this month: </b> <u>${totalSpentMonth}</u></h6>
+                                    <div className='mb-3'>
+                                        <h6><b>Feelings Counter <FontAwesomeIcon icon={faSmileBeam} /> </b></h6>
+                                        {
+                                            Object.entries(countObj).map(([key, value], index) => (
+                                                <div className='d-flex flex-row' key={index}>
+                                                    <div className='col text-center fst-italic'>
+                                                        {key}:
+                                                    </div>
 
-                                                <div className='col'>
-                                                    {value} time(s).
+                                                    <div className='col'>
+                                                        {value} time(s).
+                                                    </div>
                                                 </div>
-                                            </div>
-                                        ))
-                                    }
+                                            ))
+                                        }
+                                    </div>
+                                    <h6><b>Most expensive:</b> <u>{mostExpensive}</u></h6>
+                                    <h6><b>Your Yearly Total:</b> <u>${yearlyTotal}</u></h6>
                                 </div>
-                                <h6><b>Most expensive:</b> <u>{mostExpensive}</u></h6>
-                                <h6><b>Your Yearly Total:</b> <u>${yearlyTotal}</u></h6>
                             </div>
                         </div>
                     </div>
                     <div className={`row ${classes.renglon} d-flex flex-row justify-content-center`}>
-                        <div className={`${classes.chartDiv}`}>
+                        <h5 className='fw-bold text-center'><u>Chart</u></h5>
+                        <div className={`${classes.chartDiv} shadow container`}>
                             <canvas id="myChart" ref={canvasEl} />
                         </div>
                     </div>

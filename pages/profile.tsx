@@ -3,8 +3,8 @@ import { getSession } from 'next-auth/react';
 
 import UserProfile from '../components/profile/user-profile';
 
-function ProfilePage({ data }: any) {
-  return <UserProfile data={data} />;
+function ProfilePage({ currentUser, profileInfo }: any) {
+  return <UserProfile data={{ currentUser, profileInfo }} />;
 }
 
 export async function getServerSideProps(context: any) {
@@ -20,20 +20,30 @@ export async function getServerSideProps(context: any) {
 
   const { req } = context;
   const { cookie } = req.headers;
-  const response = await fetch(`http://localhost:3000/api/user/userAPI`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'Cookie': cookie
-    },
-  });
+  const [responseUser, responseProfileInfo] = await Promise.all([
+    fetch(`http://localhost:3000/api/user/userAPI`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': cookie
+      },
+    }),
+    fetch(`http://localhost:3000/api/profileInfo/profileInfoAPI`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Cookie': cookie
+      },
+    })
+  ]);
 
-  const data = await response.json();
-  if (!response.ok) {
-    throw new Error(data.message || 'Something went wrong!');
-  }
 
-  return { props: { data } }
+  const [userR, profileInfoR] = await Promise.all([
+    responseUser.json(),
+    responseProfileInfo.json()
+  ]);
+
+  return { props: { currentUser: userR, profileInfo: profileInfoR } }
 }
 
 export default ProfilePage;

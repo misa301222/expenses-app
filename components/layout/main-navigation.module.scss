@@ -5,6 +5,18 @@
     text-decoration: none;
   }
 
+  h5 {
+    color: white !important;
+    cursor: pointer;
+    transition: color 0.2s ease-in-out;
+  }
+
+  h5:hover {
+    color: rgb(25, 103, 192) !important;
+    // color: black !important;
+    // color: goldenrod !important;
+  }
+
   a {
     color: white !important;
     font-weight: bold;
@@ -31,4 +43,20 @@
 
 .green {
   color: #519259;
+}
+
+.centerMenu {
+  // background-color: #1967c0;
+  background: rgb(16, 86, 164);
+  background: linear-gradient(94deg, rgba(16, 86, 164, 1) 0%, rgba(65, 131, 206, 1) 53%, rgba(122, 184, 255, 1) 100%);
+  border-radius: 13px;
+  padding: 0.3em;
+
+  h5 {
+    color: white !important;    
+  }
+
+  h5:hover {
+    color: black !important;
+  }
 }

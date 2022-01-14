@@ -1,3 +1,4 @@
+import { getSession } from "next-auth/react";
 import AddExpenses from "../../components/expenses/add-expenses/add-expenses";
 
 function addExpensePage({ data }: any) {
@@ -7,6 +8,16 @@ function addExpensePage({ data }: any) {
 export default addExpensePage;
 
 export async function getServerSideProps(context: any) {
+    const session = await getSession({ req: context.req });
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+
     const { req } = context;
     const { cookie } = req.headers;
     const response = await fetch(`http://localhost:3000/api/feeling/feelingAPI`, {
