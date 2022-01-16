@@ -12,12 +12,14 @@ async function handler(req: any, res: any) {
             return res.status(400).json({ msg: "Invalid Authentication!" })
         }
         const { nameToSearch }: any = req.query;
-        console.log(nameToSearch);
+        const userRole: string = "USER";
+        // console.log(nameToSearch);
         let user = await User.find({
             fullName: {
                 $regex: '.*' + nameToSearch + '*.',
                 $options: 'i'
-            }
+            },
+            role: userRole
         });
         res.json(user);
     }

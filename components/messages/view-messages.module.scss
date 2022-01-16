@@ -13,6 +13,7 @@
     // height: 68%;
     overflow-y: auto;
     background-color: #1c1c1c;
+    // background-image: url('/static/images/Space.jpg');
     // border-right: 1px solid #ffff;
 }
 
@@ -33,6 +34,10 @@
 
 .chatDiv {
     cursor: pointer;
+    // background-color: #242424;
+    border-style: solid;
+    border-radius: 13px;
+    border-width: 1px;
 }
 
 .bubble {

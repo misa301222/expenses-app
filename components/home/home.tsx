@@ -1,11 +1,15 @@
-import { faMoneyBillAlt, faMoneyBillWaveAlt } from "@fortawesome/free-solid-svg-icons";
+import { faMoneyBillAlt, faMoneyBillWave, faMoneyBillWaveAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
+import { useSession } from "next-auth/react";
 import Head from "next/head";
+import Link from "next/link";
 import AuthForm from "../auth/auth-form";
 import classes from './home.module.scss';
 
 function Home() {
+    const { data: session, status } = useSession();
+
     return (
         <div>
             <Head>
@@ -13,7 +17,7 @@ function Home() {
                 <meta name="viewport" content="initial-scale=1.0, width=device-width" />
             </Head>
             <div className={`${classes.moneyBackground}`}>
-                <div className="container">
+                <div className="container" id="messageWelcome">
                     <motion.h1
                         animate={{
                             // rotate: [0, 0, 0, 300, -350, 0, 0, 0],
@@ -124,27 +128,49 @@ function Home() {
                         </div>
 
                         <div className={`col text-dark ${classes.colInfo}`}>
+                            {/* <motion.div 
+                            whileHover={{
+                                opacity: 1
+                            }}
+                            transition={{
+                                duration: 0.2
+                            }}
+                            className={`${classes.circle}`}>
+                            </motion.div> */}
                             <div className="container w-50">
                                 <br></br>
                                 <h5 className="text-center">We love what we do</h5>
                                 <hr></hr>
                             </div>
 
+
                             <div className="container w-50">
                                 <p className="text-center">
-                                    With our great team, not only we do our task. 
+                                    With our great team, not only we do our task.
                                     <br></br>
                                     <br></br>
                                     We do our task the best possible.
                                     <br></br>
                                     <br></br>
-                                    Because this is not only developers App, it's ours. 
+                                    Because this is not only developers App, it's ours.
                                 </p>
-                            </div>
 
+                                <div className={`container w-50 ${classes.bill}`}>
+                                    <h1 className="text-center"><FontAwesomeIcon icon={faMoneyBillWave} className={`${classes.green}`} /></h1>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
+
+                {
+                    !session && (
+                        <div className="container text-center paddingB">
+                            <h1>What are you waiting for?</h1>
+                            <h3>Manage your expenses by creating an account <Link href='#messageWelcome'>here.</Link></h3>
+                        </div>
+                    )
+                }
 
             </div>
         </div >

@@ -6,7 +6,6 @@ import { motion } from 'framer-motion';
 
 
 function ViewProfile({ data }: any) {
-
     const textMessage = {
         rest: {
             color: "grey",

@@ -45,27 +45,32 @@ async function editProfileInfo(editedProfileInfo: any) {
   return data;
 }
 
-function UserProfile({ data }: any) {
-  const [user, setUser] = useState(data.currentUser);
-  const [editedUser, setEditedUser] = useState({
-    _id: '',
-    fullName: '',
-    imageURL: '',
-    privateInfo: false
-  });
+interface ProfileInfo {
+  descriptionHeader: string,
+  description: string,
+  hobbies: string[],
+  education: string[],
+  phoneNumber: string,
+  imagesURL: string[],
+  coverURL: string,
+  location: string,
+  jobs: string[]
+}
 
-  const [profileInfo, setProfileInfo] = useState(data.profileInfo);
-  const [editedProfileInfo, setEditedProfileInfo] = useState({
-    descriptionHeader: '',
-    description: '',
-    coverURL: '',
-    education: [''],
-    hobbies: [''],
-    imagesURL: [''],
-    jobs: [''],
-    location: '',
-    phoneNumber: '',
-  });
+interface User {
+  _id: string,
+  fullName: string,
+  email: string,
+  imageURL: string,
+  privateInfo: boolean
+}
+
+function UserProfile({ data }: any) {
+  const [user, setUser] = useState<User>(data.currentUser);
+  const [editedUser, setEditedUser] = useState<User>(data.currentUser);
+
+  const [profileInfo, setProfileInfo] = useState<ProfileInfo>(data.profileInfo);
+  const [editedProfileInfo, setEditedProfileInfo] = useState<ProfileInfo>(data.profileInfo);
 
   const [show, setShow] = useState(false);
   const handleClose = () => setShow(false);
@@ -205,6 +210,15 @@ function UserProfile({ data }: any) {
         });
         editedObject.jobs = values;
         break;
+
+      case 4:
+        editedProfileInfo.imagesURL.map((element: string, index: number) => {
+          if (element)
+            values.push(element);
+        });
+        editedObject.imagesURL = values;
+        break;
+
     }
 
     await editProfileInfo(editedObject).then(response => {
@@ -278,7 +292,7 @@ function UserProfile({ data }: any) {
   useEffect(() => {
     console.log(data);
     setEditedUser(user);
-    setEditedProfileInfo(profileInfo);
+    // setEditedProfileInfo(profileInfo);
   }, []);
 
   return (
@@ -565,6 +579,49 @@ function UserProfile({ data }: any) {
                     <button type="button" className='btn btn-sm btn-primary' onClick={() => handleOnClickOpenModalArray(3)}>Add</button>
                   </div>
 
+                </div>
+              </div>
+            </div>
+
+            <div className='col'>
+              <div className='container d-flex flex-column align-items-center'>
+                <h5>Favorite images</h5>
+                <div className={`container ${classes.tableDiv}`}>
+                  <table className='table table-bordered'>
+                    <thead>
+                      <tr className='text-center'>
+                        <th>
+                          Name
+                        </th>
+                        <th>
+                          Actions
+                        </th>
+                      </tr>
+                    </thead>
+
+                    <motion.tbody layout>
+                      {
+                        profileInfo.imagesURL.map((element: string, index: number) => (
+                          element ?
+                            <tr key={index}>
+                              <td>
+                                {element}
+                              </td>
+
+                              <td className='d-flex flex-row justify-content-evenly'>
+                                <button onClick={async () => deleteElement(element, 2)} type='button' className='btn btn-outline-dark btn-danger btn-sm text-light'>
+                                  <FontAwesomeIcon icon={faTrash} />
+                                </button>
+                              </td>
+
+                            </tr> : null
+                        ))
+                      }
+                    </motion.tbody>
+                  </table>
+                </div>
+                <div>
+                  <button type="button" className='btn btn-sm btn-primary' onClick={() => handleOnClickOpenModalArray(4)}>Add</button>
                 </div>
               </div>
             </div>

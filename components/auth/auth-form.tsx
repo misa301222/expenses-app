@@ -47,7 +47,10 @@ function AuthForm() {
   const fullNameRef = useRef<any>();
   const emailInputRef = useRef<any>();
   const passwordInputRef = useRef<any>();
-  // const { data: session, status } = useSession();
+  const [wasMouseOver, setWasMouseOver] = useState(false);
+  const [showColorPicker, setShowColorPicker] = useState(false);
+  const [selectedColor, setSelectedColor] = useState('#FFFFFF');
+  const [selectedOpacity, setSelectedOpacity] = useState('100');
 
   const [isLogin, setIsLogin] = useState(true);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -201,21 +204,30 @@ function AuthForm() {
                     animate={{
                       rotateY: [0, 0, 0, 0, 300, -350, 0, 0, 0, 0],
                       translateY: [0, 0, 0, -150, -300, -150, -150, 0, 0, 0],
+                      // backgroundColor: selectedColor
                     }}
                     transition={{
                       repeat: Infinity,
                       duration: 3.5
                     }}
-                    src='/static/images/Cat.png' alt='catDrawing' className={classes.catImage} />
+                    src='/static/images/Cat.png' alt='catDrawing' className={classes.catImage} style={{ backgroundColor: selectedColor,
+                    opacity: `${selectedOpacity}%` }} />
                   <br></br>
-                  <small className='text-muted fw-bold fst-italic'>This is cute!</small>
+                  <small onMouseOver={() => setWasMouseOver(true)} style={{ cursor: 'pointer' }} className='text-muted fw-bold fst-italic'>This is cute!</small>
+                  <motion.small layout
+                    className='text-dark fw-bold fst-italic' style={{ cursor: 'pointer' }} onClick={() => setShowColorPicker(true)} hidden={!wasMouseOver}>You're curious, press me for a surprise.</motion.small>
+                  <br></br>
+                  <div className='container w-25'>
+                    <input hidden={!showColorPicker} onChange={(e) => setSelectedColor(e.target.value)} type="color" value={selectedColor} className='form-control' />
+                    <input hidden={!showColorPicker} type="range" className="form-range" onChange={(e) => setSelectedOpacity(e.target.value)} value={selectedOpacity}></input>
                 </div>
               </div>
+              </div>
             }
-          </div>
         </div>
       </div>
     </div>
+    </div >
   );
 }
 

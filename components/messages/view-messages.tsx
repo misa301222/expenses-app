@@ -254,15 +254,26 @@ function ViewMessages({ data }: any) {
                 <div className={`col-sm-3 ${classes.windowRooms}`}>
                     {
                         rooms?.map((element: Room, index: number) => (
-                            <div key={index} className={`bg-light ${classes.chatDiv} mb-3`} onClick={async () => handleOnClickRoom(element)}>
-                                <div className="row text-dark container">
+                            <motion.div
+                                whileHover={{
+                                    backdropFilter: 'blur(13px)',
+                                    backgroundColor: '#FFFF',
+                                    opacity: 0.5,
+                                    color: 'black'
+                                }}
+                                transition={{
+                                    duration: 2,
+                                    type: "spring"
+                                }}
+                                key={index} className={`${classes.chatDiv} mb-3`} onClick={async () => handleOnClickRoom(element)}>
+                                <div className="row container">
                                     <h5 className="fw-bold">{element.roomDescription}</h5>
                                 </div>
 
-                                <div className="row text-dark container">
+                                <div className="row container">
                                     <h5 className="fw-bold">Current Participants: <u>{element.participants}</u></h5>
                                 </div>
-                            </div>
+                            </motion.div>
                         ))
                     }
                 </div>

@@ -1,4 +1,5 @@
 import { Chart, registerables } from "chart.js";
+import { motion } from "framer-motion";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { useEffect, useRef, useState } from "react";
@@ -14,7 +15,7 @@ interface Expense {
 
 function ExpensesHome({ data }: any) {
     const route = useRouter();
-    const [expenses, setExpenses] = useState(data);
+    const [expensesMonth, setExpensesMonth] = useState(data);
 
     const canvasEl: any = useRef(null);
 
@@ -31,30 +32,39 @@ function ExpensesHome({ data }: any) {
         }
     };
 
-    const handleOnClickAddExpense = () => {
-        route.replace('/expenses/addExpense');
-    }
-
-    const handleOnClickShowExpense = () => {
-        route.replace('/expenses/showExpense');
-    };
-
-    useEffect(() => {
+    const [myLineChart, setMyLineChart]: any = useState(null);
+    const drawChart = () => {
         Chart.register(...registerables);
-        const ctx = canvasEl.current.getContext("2d");
-        const weight = [80, 60.2, 59.1, 50];
+        const canvas = document.getElementById('myChart') as any;
+        let ctx = canvas.getContext('2d');
+
+        let weight = [expensesMonth['01'], expensesMonth['02'], expensesMonth['03'], expensesMonth['04'], expensesMonth['05'], expensesMonth['06'],
+        expensesMonth['07'], expensesMonth['08'], expensesMonth['09'], expensesMonth['10'], expensesMonth['11'], expensesMonth['12']];
+
+        // if (response) {
+        //     weight = [response['01'], response['02'], response['03'], response['04'], response['05'], response['06'],
+        //     response['07'], response['08'], response['09'], response['10'], response['11'], response['12']];
+        // }
 
         const labels = [
-            "Week 1",
-            "Week 2",
-            "Week 3",
-            "Week 4",
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
         ];
         const data = {
             labels: labels,
             datasets: [
                 {
-                    backgroundColor: ['#E1E5EA', '#516BEB', '#C64756', '#000'],
+                    backgroundColor: ['#E1E5EA', '#516BEB', '#C64756', '#000', '#CB4335', '#1F618D', '#F1C40F', '#27AE60', '#884EA0', '#D35400', '#C64006', 'pink'],
                     label: "My First Dataset",
                     data: weight,
                     fill: true,
@@ -66,52 +76,92 @@ function ExpensesHome({ data }: any) {
             ]
         };
         const config: any = {
-            type: "doughnut",
+            type: "pie",
             data: data,
             options: {
                 responsive: true,
                 plugins: {
                     legend: {
-                        position: 'top',
+                        position: 'bottom',
                     },
                     title: {
                         display: true,
-                        text: 'Total Spent by Week of the Month'
+                        text: 'Total Spent Yearly'
                     }
                 }
             }
         };
-        const myLineChart: any = new Chart(ctx, config);
 
-        return function cleanup() {
+        if (!myLineChart) {
+            setMyLineChart(new Chart(ctx, config));
+        } else {
             myLineChart.destroy();
-        };
-    });
+            setMyLineChart(new Chart(ctx, config));
+        }
+    }
+
+    useEffect(() => {
+        console.log(data);
+        drawChart();
+    }, []);
 
     return (
         <div className="container container-data">
-            <h1 className="text-center fw-bold">Welcome to expenses!</h1>
+            <motion.h1
+                initial={{
+                    opacity: 0,
+                    scale: 0.1
+                }}
+                whileInView={{
+                    opacity: 1,
+                    scale: 1
+                }}
+                viewport={{ once: true }}
+                transition={{
+                    duration: 1
+                }}
+                className="text-center fw-bold">Welcome to expenses!</motion.h1>
             <br></br>
-            <div className="row">
+            <div                
+                className="row">
                 <div className={`col-sm-6 ${classes.colHeight}`}>
-                    Data from expenses or smth
-                    <canvas id="myChart" ref={canvasEl} height="100" />
+                    <div className="shadow">
+                        <div className={`row ${classes.renglon}`}>
+                            <canvas id="myChart" ref={canvasEl} />
+                            <div className={`${classes.containerImportant}`}>
+                                <h6 className="fw-bold"><u>Important</u></h6>
+                                <small className="fw-bold text-muted">If you want to see more detailed information about your expenses. Go to 'Show All Expenses' at the right.</small>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
                 <div className={`col-sm-6 ${classes.colHeight}`}>
-                    <div className={`row ${classes.renglon}`}>
-                        upright
-                    </div>
-                    <div className={`row ${classes.renglon}`}>
-                        <div className="container">
-                            <h5 className="text-center">Useful Links</h5>
-                            <hr></hr>
-                            <div className="list-group">
-                                <Link href="/expenses/addExpense"><a className="list-group-item list-group-item-action">Add New Expense</a></Link>
-                                <Link href="/expenses/showExpense"><a className="list-group-item list-group-item-action">Show All Expenses</a></Link>
-                            </div>
-                        </div>
+                    <div className="shadow">
+                        <div className={`row ${classes.renglon}`}>
+                            <div className="container">
+                                <h4 className="text-center">Useful Links</h4>
+                                <hr></hr>
+                                <label className="form-label fw-bold"><u>Expenses</u></label>
+                                <div className="list-group">
+                                    <Link href="/expenses/addExpense"><a className="list-group-item list-group-item-action">Add New Expense</a></Link>
+                                    <Link href="/expenses/showExpense"><a className="list-group-item list-group-item-action">Show All Expenses</a></Link>
+                                </div>
+                                <br></br>
+                                <label className="form-label fw-bold"><u>Profile</u></label>
+                                <div className="list-group">
+                                    <Link href="/profile"><a className="list-group-item list-group-item-action">Edit profile info</a></Link>
+                                </div>
 
+                                <br></br>
+                                <label className="form-label fw-bold"><u>Social</u></label>
+                                <div className="list-group">
+                                    <Link href="/viewUsers/viewUsers"><a className="list-group-item list-group-item-action">Users</a></Link>
+                                    <Link href="/messages/viewMessages"><a className="list-group-item list-group-item-action">Messages</a></Link>
+                                </div>
+                            </div>
+
+                        </div>
                     </div>
                 </div>
             </div>

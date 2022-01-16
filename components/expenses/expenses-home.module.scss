@@ -3,11 +3,17 @@
     background-color: white;
     color: black;
     border-radius: 13px;
+    padding: 1.5em;
 }
 
 .renglon {
     padding: 0.8em;
-    // background-color: cyan;
-    height: 25em;
+    //background-color: cyan;
+    // background-color: pink !important;
+    height: 47em;
     overflow-y: auto;
+}
+
+.containerImportant {
+    padding: 0.6em;
 }

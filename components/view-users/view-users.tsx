@@ -39,9 +39,7 @@ async function searchByName(nameToSearch: string) {
 }
 
 function ViewUsers({ data }: any) {
-    const [users, setUsers] = useState([{
-        email: ''
-    }]);
+    const [users, setUsers] = useState(data);
 
     const [searchUser, setSearchUser] = useState('');
 
@@ -57,7 +55,7 @@ function ViewUsers({ data }: any) {
 
     useEffect(() => {
         console.log(data);
-        setUsers(data);
+        // setUsers(data);
     }, []);
 
     return (
