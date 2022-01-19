@@ -13,7 +13,7 @@ async function handler(req: any, res: any) {
         }
         const { nameToSearch }: any = req.query;
         const userRole: string = "USER";
-        // console.log(nameToSearch);
+
         let user = await User.find({
             fullName: {
                 $regex: '.*' + nameToSearch + '*.',

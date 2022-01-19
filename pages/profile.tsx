@@ -21,14 +21,14 @@ export async function getServerSideProps(context: any) {
   const { req } = context;
   const { cookie } = req.headers;
   const [responseUser, responseProfileInfo] = await Promise.all([
-    fetch(`http://localhost:3000/api/user/userAPI`, {
+    fetch(`${process.env.NEXTAUTH_URL}/api/user/userAPI`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
         'Cookie': cookie
       },
     }),
-    fetch(`http://localhost:3000/api/profileInfo/profileInfoAPI`, {
+    fetch(`${process.env.NEXTAUTH_URL}/api/profileInfo/profileInfoAPI`, {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',

@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { useSession, signOut } from 'next-auth/react';
 import classes from './main-navigation.module.scss';
-import { faEnvelope, faHome, faMoneyBillWaveAlt, faMoneyCheck, faUserCircle, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faEnvelope, faHome, faMoneyBillWaveAlt, faMoneyCheck, faSignOutAlt, faToolbox, faUserCircle, faUsers } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { motion } from 'framer-motion';
+import { useEffect } from 'react';
 
 function MainNavigation() {
-    const { data: session, status } = useSession();
+    const { data: session, status }: any = useSession();
 
     function logoutHandler() {
         localStorage.clear();
@@ -18,19 +19,19 @@ function MainNavigation() {
     return (
         <nav className="navbar navbar-expand-lg navbar-light bg-dark">
             <div className="container-fluid d-flex">
-                <div className={`${classes.navigationTitle}`}>
+                <div className={`${classes.navigationTitle} col-sm-3`}>
                     <Link href="/">Expenses App  </Link>
                     <FontAwesomeIcon icon={faMoneyBillWaveAlt} className={classes.green} />
                 </div>
                 <div className={``} id="navbarText">
-                    <motion.ul 
-                    whileHover={{
-                        scale: 1.05
-                    }}
-                    transition={{
-                        type: "spring"
-                    }}
-                    className={`navbar-nav me-auto mb-2 mb-lg-0 ${classes.centerMenu}`}>
+                    <motion.ul
+                        whileHover={{
+                            scale: 1.05
+                        }}
+                        transition={{
+                            type: "spring"
+                        }}
+                        className={`navbar-nav me-auto mb-2 mb-lg-0 ${classes.centerMenu}`}>
                         <li className={`${classes.menuItem} nav-link nav-item`}>
                             <Link href="/"><h5 className=''><FontAwesomeIcon icon={faHome} /> Home</h5></Link>
                         </li>
@@ -49,10 +50,20 @@ function MainNavigation() {
                     </motion.ul>
                 </div>
 
-                <div className='col-sm-2'>
+                <div className='col-sm-3'>
                     <ul className='navbar-nav me-auto mb-2 mb-lg-0 d-flex flex-row justify-content-end'>
                         {session && status == "authenticated" && (
                             <div className='d-flex flex-row justify-content-end align-items-end'>
+
+                                {
+                                    session.user.role === 'ADMINISTRATOR' ?
+                                        <li className={`${classes.menuItem} nav-link nav-item`}>
+                                            <Link href="/admin-tools/start/adminTools"><h5><FontAwesomeIcon icon={faToolbox} /> Tools</h5></Link>
+                                        </li>
+                                        :
+                                        null
+                                }
+
                                 <li className={`${classes.menuItem} nav-link nav-item`}>
                                     <Link href="/messages/viewMessages"><h5><FontAwesomeIcon icon={faEnvelope} /> Messages</h5></Link>
                                 </li>
@@ -62,7 +73,7 @@ function MainNavigation() {
                                 </li>
 
                                 <li className={`${classes.menuItem} nav-link nav-item`}>
-                                    <button className='btn btn-danger btn-sm' onClick={logoutHandler}>Logout</button>
+                                    <button className='btn btn-danger btn-sm' onClick={logoutHandler}><FontAwesomeIcon icon={faSignOutAlt} /> Logout</button>
                                 </li>
                             </div>
                         )}

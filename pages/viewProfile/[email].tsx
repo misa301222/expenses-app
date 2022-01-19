@@ -21,21 +21,21 @@ export async function getServerSideProps(context: any) {
     const { email } = context.params;
 
     const [responseProfile, responseUser, responseExpenses] = await Promise.all([
-        fetch(`http://localhost:3000/api/viewProfile/${email}`, {
+        fetch(`${process.env.NEXTAUTH_URL}/api/viewProfile/${email}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Cookie': cookie
             },
         }),
-        fetch(`http://localhost:3000/api/viewUser/${email}`, {
+        fetch(`${process.env.NEXTAUTH_URL}/api/viewUser/${email}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Cookie': cookie
             },
         }),
-        fetch(`http://localhost:3000/api/expenses/${email}`, {
+        fetch(`${process.env.NEXTAUTH_URL}/api/expenses/${email}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

@@ -1,6 +1,7 @@
 import { faMoneyBillAlt } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
+import moment from "moment";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
@@ -24,7 +25,6 @@ async function createExpense(expense: any) {
 }
 
 function AddExpenses({ data }: any) {
-    const [todayDate] = useState(new Date());
     const [feeling, setFeeling] = useState([{
         feeling: '',
         feelingImageURL: ''
@@ -33,7 +33,7 @@ function AddExpenses({ data }: any) {
         description: '',
         quantitySpent: 0,
         feeling: 'Happy',
-        date: new Date(),
+        date: moment(new Date()).format('YYYY-MM-DD'),
         email: '',
     });
 
@@ -132,7 +132,7 @@ function AddExpenses({ data }: any) {
 
                             <div className="mb-3">
                                 <label htmlFor='date' className='form-label fw-bold'>Date</label>
-                                <input type='date' className="form-control" name="date" onChange={handleOnChangeDate} autoComplete="off" />
+                                <input type='date' value={expense.date} className="form-control" name="date" onChange={handleOnChangeDate} autoComplete="off" />
                             </div>
 
                             <div className="mb-3 text-center">

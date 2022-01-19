@@ -6,7 +6,7 @@ import fetch from 'isomorphic-fetch';
 import SocketIOClient from "socket.io-client";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
-import { Modal } from "react-bootstrap";
+import { Modal, OverlayTrigger, Tooltip } from "react-bootstrap";
 
 interface Room {
     _id: string
@@ -17,7 +17,8 @@ interface Room {
 
 interface Message {
     userEmail: string,
-    message: string
+    message: string,
+    createdAt?: string
 }
 
 interface User {
@@ -28,6 +29,23 @@ interface User {
 
 async function saveMessageByRoomId(message: string, roomId: string) {
     const response = await fetch(`/api/messages/messagesByRoomId/${roomId}`, {
+        method: 'POST',
+        body: JSON.stringify({ message }),
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    const data = await response.json();
+
+    if (!response.ok) {
+        throw new Error(data.message || 'Something went wrong!');
+    }
+    return data;
+}
+
+async function emitGeneralMessage(message: string, roomId: string) {
+    const response = await fetch(`/api/messages/emitGeneralMessageByRoomId/${roomId}`, {
         method: 'POST',
         body: JSON.stringify({ message }),
         headers: {
@@ -143,10 +161,9 @@ function ViewMessages({ data }: any) {
                 if (result.isConfirmed) {
                     selectedRoom.participantsEmails.push(currentUser.email);
                     selectedRoom.participants += 1;
-                    await editRoom(selectedRoom).then(response => {
-                        setCurrentRoom(response);
-                    });
-
+                    const result = await editRoom(selectedRoom);
+                    setCurrentRoom(result);
+                    await emitJoinedMessage(result._id);
                     await getMessagesByRoomId(selectedRoom._id).then((response) => {
                         setChat([...response]);
                     });
@@ -162,6 +179,16 @@ function ViewMessages({ data }: any) {
                 }
             })
         }
+    }
+
+    const emitJoinedMessage = async (roomId: string) => {
+        const message: string = `${currentUser.email} Joined the Chat`;
+        const response = await emitGeneralMessage(message, roomId);
+    }
+
+    const emitExitMessage = async (roomId: string) => {
+        const message: string = `${currentUser.email} Left the Chat`;
+        const response = await emitGeneralMessage(message, roomId);
     }
 
     const handleOnChangeNewMessage = (event: ChangeEvent<HTMLInputElement>) => {
@@ -211,6 +238,8 @@ function ViewMessages({ data }: any) {
                     }
                     editedRoom.participants -= 1;
                     editedRoom.participantsEmails = newArray;
+
+                    await emitExitMessage(currentRoom._id);
                     await editRoom(editedRoom).then(response => {
                         setChat([]);
                         setCurrentRoom(null);
@@ -225,28 +254,35 @@ function ViewMessages({ data }: any) {
     }
 
     useEffect((): any => {
-        console.log(data);
-
-        const socket = SocketIOClient('http://localhost:3000', {
-            path: "/api/socket/socketioAPI"
-        });
-
-        socket.on("connect", () => {
-            console.log("SOCKET CONNECTED!", socket.id);
-            setConnected(true);
-        });
-
-        socket.on("message", (message: string, email: string) => {
-            let newMessage: Message = ({
-                userEmail: email,
-                message: message
+        if (currentRoom) {
+            const socket = SocketIOClient('http://localhost:3000', {
+                path: "/api/socket/socketioAPI"
             });
-            setChat(prev => [...prev, newMessage]);
-        });
 
-        // socket disconnet onUnmount if exists
-        if (socket) return () => socket.disconnect();
-    }, []);
+            socket.on("connect", () => {
+                console.log("SOCKET CONNECTED!", socket.id);
+                setConnected(true);
+            });
+
+            socket.on("message", (message: string, email: string, roomId: string) => {
+                let newMessage: Message = ({
+                    userEmail: email,
+                    message: message
+                });
+
+                if (roomId === currentRoom?._id) {
+                    setChat(prev => [...prev, newMessage]);
+                    let objDiv: any = document.getElementById("chat");
+                    objDiv ? objDiv.scrollTop = objDiv.scrollHeight : '';
+                }
+            });
+
+            if (socket) return () => {
+                //THIS GETS TRIGGERED WHENEVER CURRENTROOM CHANGES
+                socket.disconnect();
+            }
+        }
+    }, [currentRoom]);
 
     return (
         <div className="">
@@ -265,7 +301,9 @@ function ViewMessages({ data }: any) {
                                     duration: 2,
                                     type: "spring"
                                 }}
-                                key={index} className={`${classes.chatDiv} mb-3`} onClick={async () => handleOnClickRoom(element)}>
+                                key={index}
+
+                                className={`${classes.chatDiv} mb-3`} onClick={async () => handleOnClickRoom(element)}>
                                 <div className="row container">
                                     <h5 className="fw-bold">{element.roomDescription}</h5>
                                 </div>
@@ -276,63 +314,95 @@ function ViewMessages({ data }: any) {
                             </motion.div>
                         ))
                     }
+
                 </div>
 
-                {currentRoom ?
-                    <div className={`col ${classes.windowChat} d-flex flex-column`}>
+                {
+                    currentRoom ?
+                        <div className={`col ${classes.windowChat} d-flex flex-column`}>
 
-                        <div className={`d-flex flex-row ${classes.rowOptions} justify-content-center align-items-center`}>
-                            <div className="col-sm-1">
-                                <button onClick={async () => handleOnClickSeeParticipants()} className={`btn btn-light btn-outline-dark btn-sm ${classes.buttonInfo}`}>
-                                    <FontAwesomeIcon icon={faInfoCircle} /> Info</button>
+                            <div className={`d-flex flex-row ${classes.rowOptions} justify-content-center align-items-center`}>
+                                <div className="col-sm-1">
+                                    <button onClick={async () => handleOnClickSeeParticipants()} className={`btn btn-light btn-outline-dark btn-sm ${classes.buttonInfo}`}>
+                                        <FontAwesomeIcon icon={faInfoCircle} /> Info</button>
+                                </div>
+                                <div className="col-sm-1">
+                                    <button onClick={async () => handleOnClickLeaveChat()} className="btn btn-danger btn-outline-light btn-sm">Leave Chat</button>
+                                </div>
                             </div>
-                            <div className="col-sm-1">
-                                <button onClick={async () => handleOnClickLeaveChat()} className="btn btn-danger btn-outline-light btn-sm">Leave Chat</button>
-                            </div>
-                        </div>
-                        <div
-                            id="chat" className={`${classes.windowMessages}`}>
-                            {
-                                chat.map((element: Message, index: number) => (
-                                    <div key={index} className={`${classes.messageDiv}`}>
-                                        <div className="row">
-                                            <h6 className="fw-bold fst-italic">{element.userEmail}</h6>
-                                        </div>
-                                        <div className="d-flex flex-row">
-                                            <div className={`${classes.bubble}`}>
-                                                <h6 className={`text-wrap ${classes.textBubble}`}>{element.message}</h6>
+                            <div
+                                id="chat" className={`${classes.windowMessages}`}>
+                                {
+                                    chat.map((element: Message, index: number) => (
+                                        element.userEmail === currentUser.email ?
+                                            <div key={index} className={`${classes.messageDiv} row mb-3 text-end`}>
+                                                <div className="row">
+                                                    <span className="fw-bold fst-italic"><u>{element.userEmail}</u></span>
+                                                </div>
+                                                <div className="d-flex flex-row justify-content-end">
+                                                    <div className={`${classes.bubble}`} style={{ marginRight: '1.4em' }}>
+                                                        <OverlayTrigger
+                                                            placement="left"
+                                                            delay={{ show: 100, hide: 0 }}
+                                                            overlay={<Tooltip id="button-tooltip-2">{element.createdAt ? new Date(element.createdAt).toLocaleTimeString() : ''}</Tooltip>}
+                                                        >
+                                                            <h6 className={`text-wrap ${classes.textBubble}`}>{element.message}</h6>
+                                                        </OverlayTrigger>
+                                                    </div>
+                                                </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                ))
-                            }
+                                            :
+                                            element.userEmail !== '-- GENERAL MESSAGE --' ?
+                                                <div key={index} className={`${classes.messageDiv} row mb-3`}>
+                                                    <div className="row">
+                                                        <span className="fw-bold fst-italic"><u>{element.userEmail}</u></span>
+                                                    </div>
+                                                    <div className="d-flex flex-row">
+                                                        <div className={`${classes.bubbleOtherPerson}`}>
+                                                            <h6 className={`text-wrap ${classes.textBubble}`}>{element.message}</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                :
+                                                <div key={index} className={`${classes.messageDiv} row mb-3 text-center`}>
+                                                    <div className="row">
+                                                        <span className="fw-bold fst-italic"><u>{element.userEmail}</u></span>
+                                                    </div>
+                                                    <div className="d-flex flex-row justify-content-center">
+                                                        <div className={`${classes.bubbleGeneralMessage}`}>
+                                                            <h6 className={`text-wrap fw-bold ${classes.textBubbleGeneralMessage}`}>{element.message}</h6>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                    ))
+                                }
+                            </div>
+
+                            <form onSubmit={handleOnSubmitMessage} className="d-flex flex-row justify-content-evenly">
+                                <input ref={inputRef} type='text' className={`form-control ${classes.formSubmitMessage}`} placeholder="Click here to start typing." value={newMessage} onChange={handleOnChangeNewMessage} />
+                                <button type="submit" className="btn btn-light btn-outline-dark"><FontAwesomeIcon icon={faPaperPlane} /></button>
+                            </form>
+
                         </div>
-
-                        <form onSubmit={handleOnSubmitMessage} className="d-flex flex-row justify-content-evenly">
-                            <input ref={inputRef} type='text' className="form-control" placeholder="Click here to start typing." value={newMessage} onChange={handleOnChangeNewMessage} />
-                            <button type="submit" className="btn btn-light btn-outline-dark"><FontAwesomeIcon icon={faPaperPlane} /></button>
-                        </form>
-
-                    </div>
-                    :
-                    <div className={`col ${classes.windowChat} d-flex flex-column justify-content-center align-items-center`}>
-                        <h4 className="text-danger fw-bold text-center">Click in a room to start chatting!</h4>
-                        <small className="fw-bold text-muted">Yes, at the left.</small>
-                        <br></br>
-                        <br></br>
-                        <motion.img
-                            animate={{
-                                rotate: 360
-                            }}
-                            transition={{
-                                type: 'spring',
-                                duration: 5,
-                                repeat: Infinity
-                            }}
-                            src='/static/images/Cat.png' alt='catDrawing' className={`${classes.catImage} shadow`} />
-                        <br></br>
-                        <small className="fw-bold text-muted">I'm rotating</small>
-                    </div>}
+                        :
+                        <div className={`col ${classes.windowChat} d-flex flex-column justify-content-center align-items-center`}>
+                            <h4 className="text-danger fw-bold text-center">Click in a room to start chatting!</h4>
+                            <small className="fw-bold text-muted">Yes, at the left.</small>
+                            <br></br>
+                            <br></br>
+                            <motion.img
+                                animate={{
+                                    rotate: 360
+                                }}
+                                transition={{
+                                    type: 'spring',
+                                    duration: 5,
+                                    repeat: Infinity
+                                }}
+                                src='/static/images/Cat.png' alt='catDrawing' className={`${classes.catImage} shadow`} />
+                            <br></br>
+                            <small className="fw-bold text-muted">I'm rotating</small>
+                        </div>}
             </div>
 
             <Modal show={show} className={`text-dark`} onHide={handleClose}>
@@ -354,7 +424,7 @@ function ViewMessages({ data }: any) {
                 </Modal.Body>
             </Modal>
 
-        </div>
+        </div >
     )
 }
 

@@ -11,7 +11,7 @@ async function handler(req: any, res: any) {
         if (!session) {
             return res.status(400).json({ msg: "Invalid Authentication!" })
         }
-        const { email }: any = session.token;
+        const { email }: any = session.user;
         let user = await User.findOne({
             email: email
         });

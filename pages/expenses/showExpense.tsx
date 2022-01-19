@@ -23,21 +23,21 @@ export async function getServerSideProps(context: any) {
     const { cookie } = req.headers;
 
     const [responseYear, responseMonth, responseFeeling] = await Promise.all([
-        fetch(`http://localhost:3000/api/expenses/expensesAPI/expensesAPIYear/${year}`, {
+        fetch(`${process.env.NEXTAUTH_URL}/api/expenses/expensesAPI/expensesAPIYear/${year}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Cookie': cookie
             },
         }),
-        fetch(`http://localhost:3000/api/expenses/expensesAPI/expensesAPIExpensesByMonth/${year}`, {
+        fetch(`${process.env.NEXTAUTH_URL}/api/expenses/expensesAPI/expensesAPIExpensesByMonth/${year}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
                 'Cookie': cookie
             },
         }),
-        fetch(`http://localhost:3000/api/feeling/feelingAPI`, {
+        fetch(`${process.env.NEXTAUTH_URL}/api/feeling/feelingAPI`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

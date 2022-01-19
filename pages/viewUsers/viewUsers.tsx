@@ -19,7 +19,7 @@ export async function getServerSideProps(context: any) {
     const { req } = context;
     const { cookie } = req.headers;
 
-    const response = await fetch(`http://localhost:3000/api/viewUser/viewUserAPI`, {
+    const response = await fetch(`${process.env.NEXTAUTH_URL}/api/viewUser/viewUserAPI`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',

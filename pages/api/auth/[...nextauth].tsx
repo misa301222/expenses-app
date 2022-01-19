@@ -8,8 +8,8 @@ connectDB();
 
 export default NextAuth({
     session: {
-        jwt: true,
-    } as any,
+        strategy: 'jwt'
+    },
     secret: process.env.SECRET,
     jwt: {
         encryption: true,
@@ -38,7 +38,8 @@ export default NextAuth({
                 if (!isValid) {
                     throw new Error('Invalid username or password. Please check the data!');
                 }
-                return { fullName: user.fullName, email: user.email };
+
+                return user;
             },
         })
     ],
@@ -46,11 +47,32 @@ export default NextAuth({
         signIn: '/login'
     },
     callbacks: {
-        session: async (session: any, user: any, token: any) => {
-            // const resUser = await Users.findById(user.sub)
-            // session.emailVerified = resUser.emailVerified
-            // session.user = user.user;
-            return Promise.resolve(session);
+        //FIX CALLBACKS
+        jwt: async ({ token, user, account, profile, isNewUser }: any) => {
+            //  "user" parameter is the object received from "authorize"
+            //  "token" is being send below to "session" callback...
+            //  ...so we set "user" param of "token" to object from "authorize"...
+            //  ...and return it...
+            if (user) {
+                token.id = user.id;
+                const { role } = user;
+                const { email } = user;
+                const { fullName } = user;
+
+                token.email = email;
+                token.role = role;
+                token.fullName = fullName;
+            }
+            return token;
+        },
+        session: async ({ session, token }: any) => {
+            if (token) {
+                session.id = token.id;
+                session.user.role = token.role;
+                session.user.fullName = token.fullName;
+            }
+
+            return session;
         }
     } as any
 });

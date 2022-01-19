@@ -22,7 +22,7 @@ async function searchByName(nameToSearch: string) {
         }
         return data;
     } else {
-        const response = await fetch(`http://localhost:3000/api/viewUser/viewUserAPI`, {
+        const response = await fetch(`/api/viewUser/viewUserAPI`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

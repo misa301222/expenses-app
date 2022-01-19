@@ -4,7 +4,7 @@ import { Chart, registerables } from 'chart.js';
 import { motion } from 'framer-motion';
 import moment from 'moment';
 import Link from 'next/link';
-import { ChangeEvent, useEffect, useRef, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { Button, Modal } from 'react-bootstrap';
 import Swal from 'sweetalert2';
 import Expense from '../../../models/expenseModel';
@@ -65,7 +65,7 @@ async function deleteExpenseById(id: string) {
 }
 
 async function getChartDataMonthly(year: string) {
-    const response = await fetch(`http://localhost:3000/api/expenses/expensesAPI/expensesAPIExpensesByMonth/${year}`, {
+    const response = await fetch(`/api/expenses/expensesAPI/expensesAPIExpensesByMonth/${year}`, {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -119,18 +119,22 @@ function ShowExpense({ data }: any) {
         setYear(event.target.value);
     }
 
-    const searchBy = async () => {
-        const data = await getExpensesByYear(year);
-        setExpenses(data);
+    const searchBy = async (event: SyntheticEvent) => {
+        event.preventDefault();
 
-        updateChart(data, year);
-        Swal.fire({
-            position: 'top-right',
-            icon: 'success',
-            title: 'Year Changed',
-            showConfirmButton: false,
-            timer: 800
-        });
+        if (year) {
+            const data = await getExpensesByYear(year);
+            setExpenses(data);
+
+            updateChart(data, year);
+            Swal.fire({
+                position: 'top-right',
+                icon: 'success',
+                title: 'Year Changed',
+                showConfirmButton: false,
+                timer: 800
+            });
+        }
     }
 
     const handleOnDelete = async (expense: Expense) => {
@@ -356,17 +360,18 @@ function ShowExpense({ data }: any) {
                 <div className={`col-sm-6 ${classes.colHeight}`}>
                     <div className={`container ${classes.padd}`}>
                         <div className='row d-flex flex-row justify-content-center'>
+                            <form className='d-flex flex-row justify-content-center' onSubmit={searchBy}>
+                                <div className='col-sm-3 text-center'>
+                                    <label className='form-label fw-bold'>Year</label>
+                                    <input className='form-control text-center' onChange={handleChangeYear} type='text' />
+                                </div>
 
-                            <div className='col-sm-3 text-center'>
-                                <label className='form-label fw-bold'>Year</label>
-                                <input className='form-control text-center' onChange={handleChangeYear} type='text' />
-                            </div>
-
-                            <div className='col-sm-3 text-center'>
-                                <label className='form-label fw-bold'>Search</label>
-                                <br></br>
-                                <button onClick={searchBy} className='btn btn-light btn-outline-dark'><FontAwesomeIcon icon={faSearchDollar} /></button>
-                            </div>
+                                <div className='col-sm-3 text-center'>
+                                    <label className='form-label fw-bold'>Search</label>
+                                    <br></br>
+                                    <button type='submit' className='btn btn-light btn-outline-dark'><FontAwesomeIcon icon={faSearchDollar} /></button>
+                                </div>
+                            </form>
 
                         </div>
 

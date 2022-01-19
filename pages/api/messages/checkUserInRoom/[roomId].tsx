@@ -11,7 +11,7 @@ async function handler(req: any, res: any) {
             return res.status(400).json({ msg: "Invalid Authentication!" })
         }
         const { roomId }: any = req.query;
-        const { email }: any = session.token;
+        const { email }: any = session.user;
         const ObjectId = require('mongodb').ObjectID;
 
         let room: any = await Room.findOne({
