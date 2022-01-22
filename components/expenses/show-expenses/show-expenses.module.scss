@@ -1,0 +1,32 @@
+.colHeight {
+    min-height: 50em;
+    background-color: white;
+    color: black;
+    border-radius: 13px;
+}
+
+.padd {
+    padding: 0.8em;
+}
+
+.cardStyle {
+    padding: 0.8em;
+}
+
+.expensesContainer {
+    padding-top: 2em;
+    // background-color: green;
+    height: 40em;
+    overflow-y: auto;
+}
+
+.renglon {
+    padding: 0.8em;
+    // background-color: cyan;
+    height: 25em;
+    // overflow-y: auto;
+}
+
+.chartDiv {
+    width: 23em;
+}

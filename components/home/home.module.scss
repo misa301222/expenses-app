@@ -1,0 +1,119 @@
+.moneyBackground {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/static/images/Money.jpg");
+    height: 50em;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+
+    h1 {
+        color: white;
+    }
+}
+
+.smokeBackground {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url("/static/images/SmokeBackground.jpg");
+    // height: 50em;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.header {
+    padding-top: 1.5em;
+}
+
+.imagesThumbnail {
+    width: 23em;
+}
+
+.cardWidth {
+    width: 25em;
+    padding: 0.8em;
+}
+
+.widthContainer {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.green {
+    color: #519259;
+}
+
+.cardStyle {
+    width: 30em;
+    margin: 0 auto;
+    min-height: 30em;
+}
+
+.gray {
+    color: #b8b8b8;
+}
+
+.whiteGray {
+    background-color: #d1d1d1;
+}
+
+.marginTop {
+    margin-top: 10em;
+}
+
+.main {
+    padding-top: 3em;
+}
+
+.codeImage {
+    width: 40em;
+}
+
+.banner {
+    background-color: white;
+}
+
+.colInfo {
+    width: 40em;
+}
+
+// .circle {
+//     position: absolute;
+//     // border-radius: 13em;
+//     background-color: red;
+//     height: 23em;
+//     width: 23em;
+//     margin-left: 9em;
+//     z-index: 1;
+//     opacity: 0.5;
+
+//     animation: wave 4s linear infinite;
+// }
+
+.bill {
+    h1 {
+        font-size: 5em;
+        box-shadow: 0px 5px 10px black;
+        // animation: wave 3s infinite;
+        animation: wave ease-in-out 2.5s infinite;
+    }
+}
+
+@keyframes wave {
+    0% {
+        transform: translateY(30px);
+    }
+
+    25% {
+        transform: translateY(-20px);
+    }
+
+    50% {
+        transform: translateY(5px);
+    }
+
+    80% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(30px);
+    }
+}

@@ -1,0 +1,65 @@
+.profile {
+  margin: 3rem auto;
+  text-align: center;
+}
+
+.profile h1 {
+  font-size: 5rem;
+}
+
+.mainContainer {
+  height: 50em;
+  background-color: white;
+  border-radius: 13px;
+}
+
+.renglon {
+  height: 25em;
+  // background-color: pink;
+
+  .path {
+    stroke-dasharray: 100;
+    animation: dash 2s ease-in-out infinite;
+  }
+
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 1000;
+    }
+  }
+}
+
+.imageContainer {
+  margin-top: 3em;
+  height: 40em;
+  width: 35em;
+}
+
+.imageContainerSmall {
+  height: 20em;
+  // background-color: green;
+  width: 35em;
+  margin-top: 2em;
+  padding: 0.3em;
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
+}
+
+.imageThumbnail {
+  width: 25em;
+  border-radius: 13px;
+}
+
+.tableDiv {
+  height: 25em;
+  overflow-y: auto;
+}
+
+.formStyle {
+  textarea {
+    resize: none;
+  }
+}
