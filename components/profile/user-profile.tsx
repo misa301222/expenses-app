@@ -363,7 +363,14 @@ function UserProfile({ data }: any) {
 
             <div className={`row ${classes.renglon} d-flex flex-row justify-content-center`}>
               <div className={`${classes.imageContainerSmall} shadow-lg`}>
-
+                <svg viewBox="0 0 200 100" className='d-flex flex-row justify-content-center'>
+                  <path fill="none" className={`${classes.path}`} stroke="red"
+                    d="M 10,30
+                        A 20,20 0,0,1 50,30
+                        A 20,20 0,0,1 90,30
+                        Q 90,60 50,90
+                        Q 10,60 10,30 z" />
+                </svg>
               </div>
             </div>
           </div>

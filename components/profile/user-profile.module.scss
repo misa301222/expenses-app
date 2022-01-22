@@ -16,6 +16,17 @@
 .renglon {
   height: 25em;
   // background-color: pink;
+
+  .path {
+    stroke-dasharray: 100;
+    animation: dash 2s ease-in-out infinite;
+  }
+
+  @keyframes dash {
+    to {
+      stroke-dashoffset: 1000;
+    }
+  }
 }
 
 .imageContainer {
@@ -51,5 +62,4 @@
   textarea {
     resize: none;
   }
-
 }
